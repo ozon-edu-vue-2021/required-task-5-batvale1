@@ -1,23 +1,24 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Products from "../views/Products.vue";
+import { routerLinks } from "./rounter-links";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "products",
+    name: routerLinks.Products,
     component: Products,
   },
   {
     path: "/cart",
-    name: "cart",
+    name: routerLinks.Cart,
     component: () => import(/* webpackChunkName: "cart" */ "../views/Cart.vue"),
   },
   {
     path: "/favourite",
-    name: "favourite",
+    name: routerLinks.Favourite,
     component: () =>
       import(/* webpackChunkName: "favourite" */ "../views/Favourite.vue"),
   },

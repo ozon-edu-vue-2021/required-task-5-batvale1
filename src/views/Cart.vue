@@ -1,11 +1,15 @@
 <template>
   <div class="cart">
-    <h1>Cart. Total {{ getTotal }}</h1>
+    <h1>Cart. Total {{ total }}</h1>
     <button v-if="cart.length" class="cart__submit-btn" @click="submitOrder">
       Оформить заказ
     </button>
     <div class="cart__list">
-      <div v-for="product in cart" :key="product.id" class="cart__product">
+      <div
+        v-for="product in cartToRender"
+        :key="product.id"
+        class="cart__product"
+      >
         <div class="cart__left">
           <p class="product__title">{{ product.dish }}</p>
           <img class="cart__product-image" :src="product.img" />
@@ -41,6 +45,9 @@
 import { mapGetters } from "vuex";
 import { productQuantityPerStep } from "../settings";
 
+const removeFromFavouriteTitle = "Убрать из избранного";
+const markAsFavouriteTitle = "Добавить в избранное";
+
 export default {
   name: "Cart",
 
@@ -51,18 +58,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters("cart", ["getCart"]),
-    ...mapGetters("cart", ["getTotal"]),
-    ...mapGetters("products", ["getProducts"]),
-    cart() {
-      return this.getCart.map((cartItem) => {
-        const productData = this.getProducts.find(
+    ...mapGetters("cart", { cart: "getCart" }),
+    ...mapGetters("cart", { total: "getTotal" }),
+    ...mapGetters("products", { products: "getProducts" }),
+    cartToRender() {
+      return this.cart.map((cartItem) => {
+        const productData = this.products.find(
           (productItem) => productItem.id === cartItem.productId
         );
         const isFavourite = Boolean(productData.favourite);
         const favouriteActionTitle = isFavourite
-          ? "Убрать из избранного"
-          : "Добавить в избранное";
+          ? removeFromFavouriteTitle
+          : markAsFavouriteTitle;
 
         return {
           ...productData,

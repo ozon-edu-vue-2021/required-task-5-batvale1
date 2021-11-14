@@ -15,10 +15,10 @@ export default {
   name: "Favourite",
 
   computed: {
-    ...mapGetters("products", ["getProducts"]),
+    ...mapGetters("products", { products: "getProducts" }),
 
     favouriteProducts() {
-      return this.getProducts.filter((item) => item.favourite);
+      return this.products.filter((item) => item.favourite);
     },
   },
 };

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { productQuantityPerStep } from "@/settings";
 
 export default {
@@ -42,20 +42,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters("products", ["getProducts"]),
-
-    products() {
-      return this.getProducts;
-    },
+    ...mapGetters("products", { products: "getProducts" }),
   },
 
   methods: {
+    ...mapActions("cart", ["addProduct"]),
+
     addToCart(product) {
       const quantity = this.currentProductQuantity[product.id]
         ? this.currentProductQuantity[product.id]
         : this.prices[0].value;
 
-      this.$store.dispatch("cart/addProduct", { product, quantity });
+      this.addProduct({ product, quantity });
     },
     setProductQuantity(quantity, productId) {
       this.$set(this.currentProductQuantity, productId, Number(quantity));

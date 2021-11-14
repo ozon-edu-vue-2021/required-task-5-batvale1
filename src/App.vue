@@ -1,20 +1,41 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Products</router-link> |
-      <router-link to="/cart">Cart</router-link> |
-      <router-link to="/favourite">Favourite</router-link>
+      <router-link
+        v-for="item in currentRoutes"
+        :key="item.name"
+        :to="{ name: item.name }"
+      >
+        {{ item.label }}
+      </router-link>
     </div>
     <router-view />
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { routerLinks } from "./router/rounter-links";
+
 export default {
   name: "App",
 
+  computed: {
+    currentRoutes() {
+      return [
+        { name: routerLinks.Products, label: "Products" },
+        { name: routerLinks.Cart, label: "Cart" },
+        { name: routerLinks.Favourite, label: "Favourite" },
+      ];
+    },
+  },
+
   created() {
-    this.$store.dispatch("products/fetchProducts");
+    this.fetchProducts();
+  },
+
+  methods: {
+    ...mapActions("products", ["fetchProducts"]),
   },
 };
 </script>
